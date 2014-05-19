@@ -11,14 +11,19 @@ require "em-apn/log_message"
 require "em-apn/response"
 require "em-apn/error_response"
 
+# HACK: em-logger puts its Logger class inside the EventMachine namespace, but
+# we still need to be able to reference the stdlib Logger class.
+BaseLogger = Logger
+require "em-logger"
+
 module EventMachine
   module APN
     def self.logger
-      @logger ||= Logger.new(STDOUT)
+      @logger ||= EM::Logger.new(BaseLogger.new(STDOUT))
     end
 
     def self.logger=(new_logger)
-      @logger = new_logger
+      @logger = EM::Logger.new(new_logger)
     end
   end
 end
