@@ -115,6 +115,8 @@ describe EventMachine::APN::Client do
 
       test_log = StringIO.new
       EM::APN.logger = Logger.new(test_log)
+      EM::APN.logger.class.should == EM::Logger
+      EM::APN.logger.logger.class.should == Logger
 
       notification = EM::APN::Notification.new(token, "alert" => alert)
 
