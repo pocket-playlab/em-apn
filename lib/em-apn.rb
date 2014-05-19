@@ -23,7 +23,11 @@ module EventMachine
     end
 
     def self.logger=(new_logger)
-      @logger = EM::Logger.new(new_logger)
+      @logger = if new_logger.is_a?(EM::Logger)
+        new_logger
+      else
+        EM::Logger.new(new_logger)
+      end
     end
   end
 end
